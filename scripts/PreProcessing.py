@@ -16,9 +16,9 @@ th_an_df = pd.read_csv('D:/pythonProject/CICIDS2017-datast-analysis/data/Thursda
                        sep=r'\s*,\s*', header=0, engine='python')
 th_mr_df = pd.read_csv('D:/pythonProject/CICIDS2017-datast-analysis/data/Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv',
                        sep=r'\s*,\s*', header=0, engine='python')
-th_mr_df['Label'] = th_mr_df['Label'].replace(['Web Attack пїЅ Brute Force'], 'Web Attack(BruteForce)')
-th_mr_df['Label'] = th_mr_df['Label'].replace(['Web Attack пїЅ XSS'], 'Web Attack(XSS)')
-th_mr_df['Label'] = th_mr_df['Label'].replace(['Web Attack пїЅ Sql Injection'], 'Web Attack(SqlInjection)')
+th_mr_df['Label'] = th_mr_df['Label'].replace(['Web Attack � Brute Force'], 'Web Attack(BruteForce)')
+th_mr_df['Label'] = th_mr_df['Label'].replace(['Web Attack � XSS'], 'Web Attack(XSS)')
+th_mr_df['Label'] = th_mr_df['Label'].replace(['Web Attack � Sql Injection'], 'Web Attack(SqlInjection)')
 tu_df = pd.read_csv('D:/pythonProject/CICIDS2017-datast-analysis/data/Tuesday-WorkingHours.pcap_ISCX.csv',
                     sep=r'\s*,\s*', header=0, engine='python')
 we_df = pd.read_csv('D:/pythonProject/CICIDS2017-datast-analysis/data/Wednesday-workingHours.pcap_ISCX.csv',
@@ -43,9 +43,8 @@ for name, df in dfs_names.items():
     # #print(df.columns[to_del])
     # print(to_del)
     # df.drop(df.columns[to_del], axis=1, inplace=True)
-    print(df.shape)
     df.dropna(axis=0, inplace=True)
-    print(df.shape)
+
 
 
 #%%"plotting attacks types presented in all datasets
@@ -55,9 +54,8 @@ def plot_all_dfs_file_types():
     font = {'family': 'Times New Roman', 'weight': 'bold', 'size': 20}
     plt.rc('font', **font)
 
-    fig, ax = plt.subplots(4, 2, sharey='row', figsize=(25, 20))
+    fig, ax = plt.subplots(4, 2, sharey='row', figsize=(27, 20))
     ax = ax.flatten()
-    print(ax.tolist())
 
     cmap = plt.get_cmap('Set2')
     colors = iter(cmap(np.arange(cmap.N)))
@@ -75,6 +73,9 @@ def plot_all_dfs_file_types():
             height = rect.get_height()
             ax[idx].text(rect.get_x() + rect.get_width() / 2, height / 4, label,
                     ha='center', va='bottom', fontsize=25)
+
+    fig.tight_layout(rect=[0.03, 0.03, 1, 0.95])
+    plt.suptitle('Attacks distribution in the CICIDS2017 dataset ', fontsize=40)
 
     plt.show()
 
@@ -96,7 +97,7 @@ def print_file_types(dataframe, df_name):
     print(df_name)
     for label in dataframe['Label'].unique():
         print(label)
-        print(dataframe.loc[dataframe['Label'] == label]['Label'].count())
+        print('{} : {} samples'.format(label,dataframe.loc[dataframe['Label'] == label]['Label'].count()))
 
 
 print_file_types(fr_an_ddos_df,'Friday-WorkingHours-Afternoon-DDos')
@@ -151,7 +152,7 @@ def plot_traffic_df_file_types():
     ax.bar(x, y, color=colors)
     ax.get_xaxis().set_visible(False)
     ax.set(ylabel='Number of samples')
-    ax.set_title('Attacks distribution in prepared dataset', fontsize=20)
+    ax.set_title('Attacks distribution in the prepared dataset', fontsize=20)
 
     color_patches = list()
     iter_color = iter(colors)

@@ -7,15 +7,15 @@ from sklearn.feature_selection import mutual_info_classif
 from sklearn.feature_selection import f_classif
 #%%" open resulting dataset file
 traffic_df = pd.read_csv('D:/pythonProject/CICIDS2017-datast-analysis/data/Whole-Traffic.pcap_ISCX.csv')
+traffic_df.drop(columns=traffic_df.columns[0], axis=1, inplace=True)
 # -----------------------------------------------------------------------------------------------------------------------
 # Data cleaning
-#%%" removing columns with a single unique value
+#%%" removing columns with only one percent of unique values
 counts = traffic_df.loc[:, : 'Idle Min'].nunique()
 to_del = [i for i, v in enumerate(counts) if (float(v)/traffic_df.loc[:, : 'Idle Min'].shape[0]*100) < 1]
 print('Columns with only one percent of unique values: {}'.format(traffic_df.columns[to_del]))
 print('Shape before deleting columns: {}'.format(traffic_df.loc[:, : 'Idle Min'].shape))
 traffic_df.drop(traffic_df.columns[to_del], axis=1, inplace=True)
-traffic_df.drop(columns=traffic_df.columns[0], axis=1, inplace=True)
 print('Shape after deleting columns: {}'.format(traffic_df.loc[:, : 'Idle Min'].shape))
 #%%" removing rows with infinite values
 print('Number of infinite values: {}'.format(np.isinf(traffic_df.loc[:, : 'Idle Min']).values.sum()))

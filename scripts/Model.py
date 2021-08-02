@@ -1,28 +1,23 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 import numpy as np
-from sklearn.ensemble import AdaBoostClassifier
-from sklearn.model_selection import train_test_split, cross_val_score, RepeatedStratifiedKFold
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import precision_score
-from sklearn.metrics import recall_score
-from sklearn.metrics import f1_score
-from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import cross_val_score, RepeatedStratifiedKFold
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
-from sklearn.naive_bayes import GaussianNB, BernoulliNB, MultinomialNB
+from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.linear_model import LogisticRegression
+
 
 #%%"
+
 info_gain_df = pd.read_csv('D:/pythonProject/CICIDS2017-datast-analysis/data/Processed-Traffic(info gain).pcap_ISCX.csv')
 anova_df = pd.read_csv('D:/pythonProject/CICIDS2017-datast-analysis/data/Processed-Traffic(anova).pcap_ISCX.csv')
 traffic_df = pd.read_csv('D:/pythonProject/CICIDS2017-datast-analysis/data/Processed-Traffic(only cleaned).pcap_ISCX.csv')
 
 
 #%%" perform training and testing
+
 def evaluate_model(df, model):
     y_df = LabelEncoder().fit_transform(df.iloc[:, -1])
     x_df = df.iloc[:, :-1]
@@ -43,9 +38,9 @@ neigh = KNeighborsClassifier(n_neighbors=3)
 rf = RandomForestClassifier(n_estimators=100)
 nb = GaussianNB()
 cart = DecisionTreeClassifier()
-lg = LogisticRegression(solver='saga', multi_class='multinomial', max_iter=100)
 
-models = [neigh, rf, nb, cart, lg]
+# models = [neigh, rf, nb, cart]
+models = [ rf, nb, cart]
 
 for model in models:
     model_trials = list()
@@ -68,8 +63,10 @@ y_pos = np.array([0, 1.2, 2.4])
 width = 0.2
 
 columns = ('Only cleaned features', 'ANOVA f-test features', 'Mutual information features')
-rows = ['KNeighborsClassifier', 'RandomForestClassifier', 'Naive Bayes',
-        'DecisionTreeClassifier', 'LogisticRegression']
+# rows = ['KNeighborsClassifier', 'RandomForestClassifier', 'Naive Bayes',
+#         'DecisionTreeClassifier']
+rows = ['RandomForestClassifier', 'Naive Bayes',
+        'DecisionTreeClassifier']
 colors = ['turquoise', 'plum', 'darkcyan', 'lightcoral', 'sandybrown']
 n_rows = len(data)
 
@@ -100,13 +97,3 @@ plt.xticks([])
 plt.title('Distribution of accuracy scores for different algorithms and datasets ')
 
 plt.show()
-
-
-
-
-
-
-
-
-
-
